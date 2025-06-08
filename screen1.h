@@ -1,48 +1,37 @@
-// BMP File Structure (windows version 3)
+// screen1.h - BMP 화면 표시용 구조체 및 함수 선언
 
-int red_position[4][2];
-int blue_position[4][2];
+#ifndef SCREEN1_H
+#define SCREEN1_H
 
-// File Header
+#include <stdint.h>
+
 typedef struct {
-//    unsigned char   bfType;         // 2 byte
-    unsigned int    bfSize;         // 4 byte
-    unsigned short  bfReserved1;    // 2 byte
-    unsigned short  bfReserved2;    // 2 byte
-    unsigned int    bfOffBits;      // 4 byte
-} BITMAPFILEHEADER;
+    uint16_t bfType;
+    uint32_t bfSize;
+    uint16_t bfReserved1;
+    uint16_t bfReserved2;
+    uint32_t bfOffBits;
+} __attribute__((packed)) BITMAPFILEHEADER;
 
-// Image Header
 typedef struct {
-    unsigned int    biSize;             // 4 byte
-    unsigned int    biWidth;            // 4 byte
-    unsigned int    biHeight;           // 4 byte
-    unsigned short  biPlanes;           // 2 byte
-    unsigned short  biBitCount;         // 2 byte
-    unsigned int    biCompression;      // 4 byte
-    unsigned int    biSizeImage;        // 4 byte
-    unsigned int    biXPelsPerMeter;    // 4 byte
-    unsigned int    biYPelsPerMeter;    // 4 byte
-    unsigned int    biClrUsed;          // 4 byte
-    unsigned int    biClrImportant;     // 4 byte
-} BITMAPINFOHEADER;
+    uint32_t biSize;
+    int32_t  biWidth;
+    int32_t  biHeight;
+    uint16_t biPlanes;
+    uint16_t biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
+    int32_t  biXPelsPerMeter;
+    int32_t  biYPelsPerMeter;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
+} __attribute__((packed)) BITMAPINFOHEADER;
 
-// Color Table
-typedef struct {
-// windows version 3
-    unsigned char   rgbBlue;        // 1 byte
-    unsigned char   rgbGreen;       // 1 byte
-    unsigned char   rgbRed;         // 1 byte
-    unsigned char   rgbReserved;    // 1 byte
-} RGBQUAD;
-//int bmp_read (char *fn);
-//int bmp_read(char *fn, int piece_x, int piece_y);  // for screen1.h
+extern int red_positions[4][2];
+extern int blue_positions[4][2];
 
-int bmp_read(char *fn, int red_position[4][2], int blue_position[4][2]); // for screen_test2
+void close_bmp(char **pDib);
+void read_bmp(char *filename, char **pDib, char **data, int *cols, int *rows);
+int bmp_read(char *fn, int red_position[4][2], int blue_position[4][2]);
 
-int bmp_read2 (char *fn,int x, int y);
-// Pixel Data
-typedef struct {
-    BITMAPINFOHEADER    bmiHeader;
-    RGBQUAD             bmiColors[1];
-} BITMAPINFO;
+#endif // SCREEN1_H
